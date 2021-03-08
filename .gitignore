@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# Useless files
+to-do.txt
+wallpaper-downloader.ui
+lista.txt
+pyqtGUI.py
+
+#Useless folders
+cloud/
