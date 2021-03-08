@@ -9,9 +9,7 @@ theme = ''
 defaultpath_file = 'defaultpath.txt'
 defaultpath = open(defaultpath_file, 'r+')
 
-print('Reading default path')
 parent_dir = str(defaultpath.readline())
-print('File cont > ', parent_dir)
 
 if parent_dir == '':
     defaultpath.write(os.getcwd())
@@ -45,20 +43,16 @@ def init_gui_mode():
 
 
 
-
+# Main code
 
 if __name__ == '__main__':
-
-    print('Starting...\n\n')
     #fonts = ('poison', 'larry3d', 'isometric1', 'cosmic', 'block', '3-d') good fonts
     themes_list = []
     isList = False
 
     if len(sys.argv) > 1:
 
-        print('Console mode started\n\n')
-
-        params = ['-l', '-d', '-n']
+        params = ['-l', '-d', '-n', '-h', '--help']
 
         if not any([x in params for x in sys.argv]): # If there is any parameter in arguments
             theme = ' '.join(sys.argv[1:])
@@ -82,12 +76,23 @@ if __name__ == '__main__':
                 nwp = int(sys.argv[ pos ])
             
 
+            elif '-h' or '--help' in sys.argv:
+                print("""
+                Use:
+                -h | --help     Show this help message
+                -l              Select a text file as a list to search
+                -d              Set default directory to download the wallpapers
+                -n              Limit the number of wallpapers to download
+                """)
+                exit()
+
             """ if '-i' in sys.argv:
                 pos = sys.argv.index('-i') + 1
                 results_index = int(sys.argv[ pos ]) """
 
             theme = sys.argv[1]
 
+        print('Console mode started\n\n')
 
     else:
 
@@ -98,6 +103,10 @@ if __name__ == '__main__':
         init_gui_mode()
 
 
+    # Debug
+    print('Starting...\n\n')
+    print('Reading default path')
+    print('File cont > ', parent_dir)
     # ----------------- BANNER------------------------
 
     import pyfiglet
