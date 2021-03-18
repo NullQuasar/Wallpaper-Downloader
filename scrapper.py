@@ -1,30 +1,32 @@
-import os, requests
+import os
+import requests
 import urllib.parse
 from bs4 import BeautifulSoup
 
-main_url = 'https://wallpapercave.com'
-nwp = None # Number of wallpapers to download (-n param)
+main_url = 'https://wallpapercave.com'  # Website to scrape
+nwp = None  # Number of wallpapers to download (-n param)
+
 
 def set_list(filename):
-    # Set a list of wallpapers
+    """ Set a list of wallpapers """
     if os.path.isfile(filename):
         try:
             with open(filename, 'rb') as f:
-                themes = f.readlines()
-                return themes # Return a list with all the file lines
+                subjects = f.readlines()
+                return subjects  # Return a list with all the file lines
 
         except Exception as e:
             print('An error ', e, ' has ocurred in func set_list, line 37')
-    
+
     else:
         print('Error, file ' + filename + ' does not exist or is corrupt')
-        isList = False # This prevent to iterate a None type var
-
+        isList = False  # This prevent to iterate a None type var
 
 
 def multiple_results_func(soup, dirn, index=1):
-    # Function to handle multiple results for a query
+    """ Function to handle multiple results for a query """
     tags = soup.find_all('a', class_='albumthumbnail')
+
     if tags is None:
         # There is no any result
         print('The is no any result for your search :(')
@@ -35,15 +37,13 @@ def multiple_results_func(soup, dirn, index=1):
     get_images(link, dirn, nwp)
 
 
-
 def get_images(url, dirname, wallpapers):
-    """
-    Get images
-    """
+    """ Get subject wallpapers """
+
     global nwp
     nwp = wallpapers
     url = str(url.replace('\\', '/'))
-    
+
     print('url > ' + url)
 
     try:
@@ -86,7 +86,6 @@ def get_images(url, dirname, wallpapers):
             print('Not found')
             print('Executing multiple_results_func function...')
             multiple_results_func(soup, dirname, )
-
 
     except FileExistsError:
         print('\nError a folder ' + dirname + ' already exist')

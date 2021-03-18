@@ -1,11 +1,10 @@
-#import pandas as pd
 import sys
 from scrapper import *
 
-#from selenium import webdriver
-theme = ''
+subject = ''  # The subject to search wallpapers
 
 
+""" Get default download path or set one """
 defaultpath_file = 'defaultpath.txt'
 defaultpath = open(defaultpath_file, 'r+')
 
@@ -17,8 +16,8 @@ if parent_dir == '':
 defaultpath.close()
 
 
-
 def set_default_folders_path(folder):
+    """ Set a default path to download the wallpapers """
 
     if os.path.exists(folder):
         parent_dir = folder
@@ -32,50 +31,48 @@ def set_default_folders_path(folder):
         return
 
 
-
 # Set program as GUI mode
 def init_gui_mode():
-    # Set theme or list of themes
-    
-    isList = False # Do not remove
-    # themes_list = set_list(f)
+    # Set subject or list of subjects
 
-
+    isList = False  # Do not remove
+    # subjects_list = set_list(f)
 
 
 # Main code
-
 if __name__ == '__main__':
-    #fonts = ('poison', 'larry3d', 'isometric1', 'cosmic', 'block', '3-d') good fonts
-    themes_list = []
+    # fonts = ('poison', 'larry3d', 'isometric1', 'cosmic', 'block', '3-d') good fonts
+    subjects_list = []
     isList = False
 
     if len(sys.argv) > 1:
+        """ Check if is there any parameter """
 
         params = ['-l', '-d', '-n', '-h', '--help']
 
-        if not any([x in params for x in sys.argv]): # If there is any parameter in arguments
-            theme = ' '.join(sys.argv[1:])
-            
+        # If there is any parameter in arguments
+        if not any([x in params for x in sys.argv]):
+            subject = ' '.join(sys.argv[1:])
+
         else:
 
             # Set a list of wallpapers
             if '-l' in sys.argv:
                 pos = sys.argv.index('-l') + 1
-                themes_list = set_list(sys.argv[ pos ])
+                subjects_list = set_list(sys.argv[pos])
                 isList = True
 
-            # Set a default directory
+            # Set a default directory to download the wallpapers
             if '-d' in sys.argv:
                 pos = sys.argv.index('-d') + 1
-                set_default_folders_path(sys.argv[ pos ])
+                set_default_folders_path(sys.argv[pos].replace('\\', '/'))
 
-
+            # Limit the number of wallpapers to download
             if '-n' in sys.argv:
                 pos = sys.argv.index('-n') + 1
-                nwp = int(sys.argv[ pos ])
-            
+                nwp = int(sys.argv[pos])
 
+            # Get help
             elif '-h' or '--help' in sys.argv:
                 print("""
                 Use:
@@ -90,18 +87,9 @@ if __name__ == '__main__':
                 pos = sys.argv.index('-i') + 1
                 results_index = int(sys.argv[ pos ]) """
 
-            theme = sys.argv[1]
+            subject = sys.argv[1]
 
         print('Console mode started\n\n')
-
-    else:
-
-        print('UI mode started')
-
-        # File pyqtGUI.py
-
-        init_gui_mode()
-
 
     # Debug
     print('Starting...\n\n')
@@ -116,27 +104,28 @@ if __name__ == '__main__':
     # ----------------- BANNER------------------------
 
     # If query is not empty
-    if theme.strip() != '':
+    if subject.strip() != '':
 
         url_query = main_url + '/search?q='
-        dirname = os.path.join(parent_dir, theme) + '/'
+        dirname = os.path.join(parent_dir, subject) + '/'
         print('Dir path > ', parent_dir)
 
         if isList:
             try:
-                for wp in themes_list:
+                for wp in subjects_list:
                     wp = wp.decode('ascii')[:-2]
                     cfolder = os.path.join(parent_dir, wp)
-                    get_images(url_query + urllib.parse.quote(wp), cfolderm, nwp)
+                    get_images(url_query + urllib.parse.quote(wp),
+                               cfolderm, nwp)
 
             except TypeError as tpe:
                 print('Type Error > ', tpe)
-            
+
             except Exception as e:
                 print('An exception has occured > ', e)
 
         else:
-            get_images(url_query + urllib.parse.quote(theme), dirname, nwp)
+            get_images(url_query + urllib.parse.quote(subject), dirname, nwp)
 
     # If query is an empty string
     else:
