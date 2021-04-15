@@ -6,9 +6,12 @@ subject = ''  # The subject to search wallpapers
 
 """ Get default download path or set one """
 defaultpath_file = 'defaultpath.txt'
-defaultpath = open(defaultpath_file, 'r+')
+try: 
+    defaultpath = open(defaultpath_file, 'r+')
+except FileNotFoundError:
+    defaultpath = open(defaultpath_file, 'w')
 
-parent_dir = str(defaultpath.readline())
+parent_dir = str(defaultpath.readline()).strip()
 
 if parent_dir == '':
     defaultpath.write(os.getcwd())
@@ -108,6 +111,7 @@ if __name__ == '__main__':
 
         url_query = main_url + '/search?q='
         dirname = os.path.join(parent_dir, subject) + '/'
+        dirname = dirname.strip()
         print('Dir path > ', parent_dir)
 
         if isList:
