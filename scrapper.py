@@ -57,9 +57,6 @@ def get_images(url, dirname, wallpapers):
 
         if len(wp) > 0:
 
-            os.mkdir(dirname)
-            print('dir path > ' + dirname)
-
             for element in wp:
                 wplink = element.find('img', class_='wpimg').get('src')
                 wpname = wplink[wplink.rfind('/'):]
@@ -87,9 +84,9 @@ def get_images(url, dirname, wallpapers):
             print('Executing multiple_results_func function...')
             multiple_results_func(soup, dirname, )
 
-    except FileExistsError:
-        print('\nError a folder ' + dirname + ' already exist')
+    except FileExistsError as e:
+        print('\nFileExistsError: ', e)
         return
 
     except Exception as e:
-        print('An exception has occured > ', e)
+        print('An error has occurred > ', e)

@@ -51,13 +51,28 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         """ Check if is there any parameter """
 
-        params = ['-l', '-d', '-n', '-h', '--help']
+        params = ['-l', '-d', '-n', '-nf', '-h', '--help']
 
         # If there is any parameter in arguments
         if not any([x in params for x in sys.argv]):
             subject = ' '.join(sys.argv[1:])
 
         else:
+
+            subject = ' '.join(sys.argv[len(sys.argv)-1:])
+
+            # Avoid to download the wallpapers into a folder
+            if '-nf' not in sys.argv:
+                dirname = os.path.join(parent_dir, subject) + '/'
+                try:
+                    os.mkdir(dirname)
+                except FileExistsError:
+                    new_dir = input(f'An folder named {dirname} already exists.\nCreate a new folder named {dirname}_(1)? (y/n): ')
+                    dirname += '_(1)' if new_dir.lower() == 'y' else exit()
+            else:
+                dirname = parent_dir
+            
+            dirname = dirname.strip()
 
             # Set a list of wallpapers
             if '-l' in sys.argv:
@@ -75,6 +90,11 @@ if __name__ == '__main__':
                 pos = sys.argv.index('-n') + 1
                 nwp = int(sys.argv[pos])
 
+
+            if '-open' in sys.argv:
+                # Open wallpaper's container folder
+                os.system(f'start {dirname}')
+
             # Get help
             elif '-h' or '--help' in sys.argv:
                 print("""
@@ -83,6 +103,8 @@ if __name__ == '__main__':
                 -l              Select a text file as a list to search
                 -d              Set default directory to download the wallpapers
                 -n              Limit the number of wallpapers to download
+                -nf             Dont download the wallpapers into a folder
+                -open           Open container folder
                 """)
                 exit()
 
@@ -90,7 +112,6 @@ if __name__ == '__main__':
                 pos = sys.argv.index('-i') + 1
                 results_index = int(sys.argv[ pos ]) """
 
-            subject = sys.argv[1]
 
         print('Console mode started\n\n')
 
@@ -110,9 +131,9 @@ if __name__ == '__main__':
     if subject.strip() != '':
 
         url_query = main_url + '/search?q='
-        dirname = os.path.join(parent_dir, subject) + '/'
-        dirname = dirname.strip()
+
         print('Dir path > ', parent_dir)
+        print('Download path > ' + dirname)
 
         if isList:
             try:
@@ -120,7 +141,7 @@ if __name__ == '__main__':
                     wp = wp.decode('ascii')[:-2]
                     cfolder = os.path.join(parent_dir, wp)
                     get_images(url_query + urllib.parse.quote(wp),
-                               cfolderm, nwp)
+                               dirname, nwp)
 
             except TypeError as tpe:
                 print('Type Error > ', tpe)
@@ -133,4 +154,4 @@ if __name__ == '__main__':
 
     # If query is an empty string
     else:
-        print('Use: main.py [wallpaper] [-n] [-d] [-l]\n')
+        print('Use: main.py [-n] [-d] [-l] [wallpaper]\n')
