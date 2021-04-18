@@ -28,6 +28,3 @@ $ python3 main.py [wallpaper] [-n] [-d] [-l]
 ```
 
 
-
-
-You can use all the code of this repo as you want, you don't need a before using it permission, so be free to do whatever you want
