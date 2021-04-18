@@ -24,6 +24,8 @@ $ python3 main.py [wallpaper] [-n] [-d] [-l]
                 -l              Select a text file as a list to search
                 -d              Set default directory to download the wallpapers
                 -n              Limit the number of wallpapers to download
+                -nf             Dont download the wallpapers into a folder
+                -open           Open container folder
                 
 ```
 
