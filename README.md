@@ -14,7 +14,7 @@ $ git clone https://github.com/NullQuasar/Wallpaper-Downloader.git
 $ cd Wallpaper-Downloader
 
 // Install requirements
-$ python3 -m pip install -r requeriments.txt
+$ python3 -m pip install -r requirements.txt
 ```
 
 # Usage
